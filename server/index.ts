@@ -2,33 +2,46 @@ import express, { Express, Request, Response } from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import dotenv from "dotenv"
+import config from "./src/config";
 
 dotenv.config()
 
 const app: Express = express();
 
-app.use(express.json())
+config(app)
+
+
+
+
+// const ioOptions = {}
+
+// const io: Server = new Server(httpServer, ioOptions)
 
 const httpServer = createServer(app)
 
-const ioOptions = {}
+httpServer.listen(process.env.PORT || 5000, () => {
 
-const io = new Server(httpServer, ioOptions)
+    console.log(`\n ⚡️[server]: Server is running at http://localhost:${process.env.PORT || 5000} \n`);
 
-app.get("/", (req: Request, res: Response) => {
-
-    res.json({ search: `${req.query?.search}` })
-
-})
-
-io.on("connection", (Socket) => {
-
-    console.log(Socket.id)
-
-})
-
-httpServer.listen(3000, () => {
-    console.log(`⚡️[server]: Server is running at http://localhost:${3000}`);
 });
 
-console.log("yay its working ")
+// console.log("yay its working ")
+// app.get("/", (req: Request, res: Response) => {
+
+//     res.json({ search: `${req.query?.search}` })
+
+// })
+
+// io.on("connection", (Socket) => {
+
+//     console.log(Socket.id)
+
+//     Socket.emit("send", "Hi you connected to socket.io")
+
+//     Socket.on("message", (message: String) => {
+//         console.log(message)
+
+//         Socket.emit("send", ` you sent the message : ${message}`)
+//     })
+
+// })
