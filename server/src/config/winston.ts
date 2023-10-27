@@ -1,4 +1,4 @@
-import winston, { stream } from "winston";
+import winston from "winston";
 import path from "path";
 
 /** 
@@ -8,7 +8,7 @@ import path from "path";
 const options = {
 
     File: { //save logs in log file
-        filename: path.join(__dirname, "../logs/app.log"),
+        filename: path.join(__dirname, "../../logs/app.log"),
         handleExceptions: true,
         format: winston.format.json(),
         maxsize: 5 * 1024 * 1024,
