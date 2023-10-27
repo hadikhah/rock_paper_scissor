@@ -39,7 +39,7 @@ export class LoggerStream {
 
     write(message: string) {
 
-        logger.error(message)
+        logger.info(message)
 
     }
 
