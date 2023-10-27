@@ -11,7 +11,7 @@ const connect = async (mongodb_address: string) => {
         // try to connect to db
         const conn = await mongoose.connect(mongodb_address)
 
-        console.log(`------- mongo connected to: ${conn.connection.host} ---------`)
+        console.log(`\n 📙[Database] : ------ mongo connected to: ${conn.connection.host} ------ \n`)
 
     } catch (err) {
 
