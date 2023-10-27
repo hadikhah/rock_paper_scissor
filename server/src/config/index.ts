@@ -6,6 +6,7 @@ import path from "path";
 import connect from "./db"
 import { LoggerStream } from "./winston"
 import routeConfig from "./route"
+import errorHandler from "../middlewares/Exeption";
 
 const config = async (app: Express) => {
 
@@ -29,6 +30,9 @@ const config = async (app: Express) => {
 
     // routes configuration
     routeConfig(app)
+
+    // Error Handling
+    app.use(errorHandler)
 
 }
 
