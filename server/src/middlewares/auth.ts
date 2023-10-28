@@ -1,6 +1,29 @@
-import { Response } from 'express';
+import { Request, NextFunction, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { UserModel } from '../models/User';
+import User, { UserModel } from '../models/User';
+import { ErrorHandler, catchAsyncError } from './Exeption';
+
+/**
+ * express request interface with user
+ *
+ * @export
+ * @interface AuthRequest
+ * @extends {Request}
+ */
+export interface AuthRequest extends Request {
+
+    user?: UserModel | null
+
+}
+
+/**
+ * jwt paylaod interface
+ *
+ * @interface JwtPayload
+ */
+interface JwtPayload {
+    userId: string
+}
 
 /**
  * generates and returns a Json web Token for given user
@@ -28,7 +51,7 @@ export const generateJwtToken = (userId: string): String => {
  */
 export const sendToken = (user: UserModel, statusCode: number, res: Response) => {
 
-    const token = generateJwtToken(user._id)
+    const token: String = generateJwtToken(user._id)
 
     const JWT_COOKIE_EXPIRES: number = Number(process.env.JWT_COOKIE_EXPIRES || 60)
 
@@ -41,6 +64,35 @@ export const sendToken = (user: UserModel, statusCode: number, res: Response) =>
         }
     )
 
-    return res.status(201).json({ user: { user }, token })
+    const { email, _id } = user
+
+    return res.status(201).json({ user: { email, _id }, token })
 
 }
+
+/**
+*
+*
+* @param {AuthRequest} req
+* @param {Response} res
+* @param {NextFunction} next
+*/
+export const protect = catchAsyncError(async (req: AuthRequest, res: Response, next: NextFunction) => {
+
+    const token = req.cookies.token
+
+    if (!token)
+        throw new ErrorHandler("Unauthorized", 401)
+
+    const { userId } = await jwt.decode(token) as JwtPayload
+
+    req.user = await User.findById(userId)
+
+    if (!req.user)
+        throw new ErrorHandler("User not found", 404)
+
+    // TODO add roles and user status and check if user was suspended
+
+    next()
+
+})
