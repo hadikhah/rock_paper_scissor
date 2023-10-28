@@ -81,7 +81,6 @@ export const checkUnique = (model: Model<any>, field: any,) => {
  */
 const isUnique: any = async (model: Model<Object>, field: any, data: any, req: Request, res: Response, next: NextFunction) => {
 
-    console.log(field, data)
     const isUnique = ! await model.findOne({ [field]: data }).lean()
 
     const errorMessage = `${field} is already taken`
@@ -90,8 +89,6 @@ const isUnique: any = async (model: Model<Object>, field: any, data: any, req: R
         instancePath: field,
         message: errorMessage
     }
-
-    console.log(isUnique)
 
     if (!isUnique)
         throw new ValidationError(errorMessage, 422, [ErrorObject])
