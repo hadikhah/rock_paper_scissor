@@ -33,14 +33,13 @@ export const catchAsyncError = (theFunc: Function) => (req: Request, res: Respon
  */
 export const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
 
-    console.log(err.statusCode, "\n")
-
     res.status(err.statusCode || 500)
         .json(err.validationErrorMessages ?? {
             success: false,
             name: err.name,
             message: err.message || `Internal server Error`,
-            stack: process.env.NODE_ENV === "development" ? err.stack : null
+            // stack: process.env.NODE_ENV == "development" ? err.stack : null
+            stack: err.stack || null
         })
 }
 
@@ -53,9 +52,7 @@ export const errorHandler = (err: Error, req: Request, res: Response, next: Next
  */
 export class ErrorHandler<Error> extends Error {
 
-    statusCode: number
-
-    constructor(message = "", statusCode: number) {
+    constructor(message = "", public statusCode: number) {
 
         super(message)
 
@@ -75,9 +72,7 @@ export class ErrorHandler<Error> extends Error {
  */
 export class ValidationError extends ErrorHandler<Error> {
 
-    validationErrorMessages: Array<Object>
-
-    constructor(message = "", statusCode: number = 422, validationErrorMessages: Array<Object>) {
+    constructor(message = "", statusCode: number = 422, public validationErrorMessages: Array<Object>) {
 
         super(message, statusCode)
 
