@@ -1,7 +1,13 @@
-import mongoose, { CallbackWithoutResultAndOptionalError, Schema } from "mongoose"
+import mongoose, { CallbackWithoutResultAndOptionalError, Document, Schema } from "mongoose"
 import { genSalt, hash } from "bcryptjs"
 
-interface UserInterface {
+/**
+ *
+ * @export
+ * @interface UserInterface
+ * @extends {Document}
+ */
+export interface UserInterface {
 
     name?: string
 
@@ -15,7 +21,19 @@ interface UserInterface {
 
 }
 
-const userSchema = new Schema<UserInterface>({
+export interface UserModel extends UserInterface, Document {
+
+    name?: string
+
+    email: string
+
+    avatar?: string
+
+    emailVerifiedAt?: Date,
+
+}
+
+const userSchema: Schema = new Schema<UserModel>({
     name: {
         type: String,
         required: false,
@@ -51,21 +69,21 @@ const userSchema = new Schema<UserInterface>({
 )
 
 // Encrypt password befor saveing to DB
-userSchema.pre("save", async function (next: CallbackWithoutResultAndOptionalError) {
+userSchema.pre("save", async function (this: UserModel, next: CallbackWithoutResultAndOptionalError) {
 
     if (!this.isModified("password"))
 
         return next()
 
     const salt = await genSalt(10)
-    const hashPassword = await hash(this.password, salt)
+    const hashedPassword = await hash(this.password, salt)
 
-    this.password = hashPassword
+    this.password = hashedPassword
 
     next()
 
 })
 
-const User = mongoose.model("User", userSchema)
+const User = mongoose.model<UserModel>("User", userSchema)
 
 export default User
