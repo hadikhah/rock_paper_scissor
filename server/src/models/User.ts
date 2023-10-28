@@ -51,6 +51,7 @@ const userSchema: Schema = new Schema<UserModel>({
     password: {
         type: String,
         required: [true, "password field is required"],
+        select: false
     },
     avatar: {
         type: String,
