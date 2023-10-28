@@ -8,6 +8,7 @@ import { NextFunction, Request, Response } from "express";
 interface Error {
     name: string;
     message: string;
+    validationErrorMessages?: Array<Object>
     statusCode?: number
     stack?: string;
 }
@@ -32,8 +33,10 @@ export const catchAsyncError = (theFunc: Function) => (req: Request, res: Respon
  */
 export const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
 
+    console.log(err.statusCode, "\n")
+
     res.status(err.statusCode || 500)
-        .json({
+        .json(err.validationErrorMessages ?? {
             success: false,
             name: err.name,
             message: err.message || `Internal server Error`,
@@ -48,15 +51,37 @@ export const errorHandler = (err: Error, req: Request, res: Response, next: Next
  * @class ErrorHandler
  * @extends {Error}
  */
-export class ErrorHandler extends Error {
+export class ErrorHandler<Error> extends Error {
 
-    statusCode: Number
+    statusCode: number
 
-    constructor(message = "", statusCode: Number) {
+    constructor(message = "", statusCode: number) {
 
         super(message)
 
         this.statusCode = statusCode
+
+        Error.captureStackTrace(this, this.constructor)
+
+    }
+}
+
+/**
+ * Handles validation Errors
+ *
+ * @export
+ * @class ValidationExeption
+ * @extends {ErrorHandler}
+ */
+export class ValidationError extends ErrorHandler<Error> {
+
+    validationErrorMessages: Array<Object>
+
+    constructor(message = "", statusCode: number = 422, validationErrorMessages: Array<Object>) {
+
+        super(message, statusCode)
+
+        this.validationErrorMessages = validationErrorMessages
 
         Error.captureStackTrace(this, this.constructor)
 
