@@ -8,4 +8,4 @@ docker compose stop nodejs_server
 
 docker compose build nodejs_server
 
-docker compose start nodejs_server
+docker compose restart nodejs_server
