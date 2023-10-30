@@ -69,7 +69,7 @@ const userSchema: Schema = new Schema<UserModel>({
     }
 )
 
-// Encrypt password befor saveing to DB
+// Encrypt password before saving to DB
 userSchema.pre("save", async function (this: UserModel, next: CallbackWithoutResultAndOptionalError) {
 
     if (!this.isModified("password"))

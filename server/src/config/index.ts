@@ -8,7 +8,7 @@ import cookieParser from "cookie-parser"
 import connect from "./db"
 import { LoggerStream } from "./winston"
 import routeConfig from "./route"
-import errorHandler from "../middlewares/Exeption";
+import errorHandler from "../middlewares/Exception";
 
 const config = async (app: Express) => {
 

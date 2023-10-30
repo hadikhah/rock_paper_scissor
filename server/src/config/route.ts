@@ -3,13 +3,18 @@ import { Express } from "express"
 import auth from "../routes/auth"
 import profile, { profilePrefix } from "../routes/profile"
 
+/**
+ * adds route files and route file configurations
+ *
+ * @param {Express} app
+ */
 const routeConfig = (app: Express) => {
 
-    const appV1RoutePrifix: string = "/api/v1"
+    const appV1RoutePrefix: string = "/api/v1"
 
-    app.use(appV1RoutePrifix, auth)
+    app.use(appV1RoutePrefix, auth)
 
-    app.use(`${appV1RoutePrifix}/${profilePrefix}`, profile)
+    app.use(`${appV1RoutePrefix}/${profilePrefix}`, profile)
 
 }
 

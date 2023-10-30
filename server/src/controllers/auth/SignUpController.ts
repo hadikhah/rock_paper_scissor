@@ -1,7 +1,9 @@
-import { sendToken } from './../../middlewares/auth';
 import { Request, Response } from "express"
+
 import User, { UserModel } from "../../models/User"
-import { catchAsyncError } from "../../middlewares/Exeption"
+
+import { sendToken } from './../../middlewares/auth';
+import { catchAsyncError } from "../../middlewares/Exception"
 
 
 /**

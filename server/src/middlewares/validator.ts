@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express"
 import Ajv from "ajv"
 import addFormats from "ajv-formats"
 import { Model } from "mongoose"
-import { ValidationError, catchAsyncError } from "./Exeption"
+import { ValidationError, catchAsyncError } from "./Exception"
 
 // TODO add ajv error messages package
 // TODO check more on types to be more specific
