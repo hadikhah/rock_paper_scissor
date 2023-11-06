@@ -4,7 +4,7 @@ import { Router } from 'express';
 
 const router = Router()
 
-export const profilePrefix: string = "/api/v1/user"
+export const profilePrefix: string = "/user"
 
 router.get("/profile", protect, getUser)
 
