@@ -83,7 +83,7 @@ const isUnique: any = async (model: Model<Object>, field: any, data: any, req: R
 
     const isUnique = ! await model.findOne({ [field]: data }).lean()
 
-    const errorMessage = `${field} is already taken`
+    const errorMessage = `${field} is already in use`
 
     const ErrorObject = {
         instancePath: field,
