@@ -1,7 +1,7 @@
 import { Request, NextFunction, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import User, { UserModel } from '../models/User';
-import { ErrorHandler, catchAsyncError } from './Exeption';
+import { ErrorHandler, catchAsyncError } from './Exception';
 
 /**
  * express request interface with user
