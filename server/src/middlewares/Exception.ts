@@ -38,8 +38,7 @@ export const errorHandler = (err: Error, req: Request, res: Response, next: Next
             success: false,
             name: err.name,
             message: err.message || `Internal server Error`,
-            // stack: process.env.NODE_ENV == "development" ? err.stack : null
-            stack: err.stack || null
+            stack: process.env.NODE_ENV == "development" ? err.stack?.split("\n   ") || null : null
         })
 }
 
@@ -67,7 +66,7 @@ export class ErrorHandler<Error> extends Error {
  * Handles validation Errors
  *
  * @export
- * @class ValidationExeption
+ * @class ValidationException
  * @extends {ErrorHandler}
  */
 export class ValidationError extends ErrorHandler<Error> {
