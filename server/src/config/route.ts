@@ -14,7 +14,7 @@ const routeConfig = (app: Express) => {
 
     app.use(appV1RoutePrefix, auth)
 
-    app.use(`${appV1RoutePrefix}/${profilePrefix}`, profile)
+    app.use(`${appV1RoutePrefix}${profilePrefix}`, profile)
 
 }
 
