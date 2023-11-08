@@ -64,9 +64,9 @@ export const sendToken = (user: UserModel, statusCode: number, res: Response) =>
         }
     )
 
-    const { email, _id } = user
+    const { _id, name, email, avatar, emailVerifiedAt } = user
 
-    return res.status(201).json({ user: { email, _id }, token })
+    return res.status(statusCode).json({ user: { _id, name, email, avatar, emailVerifiedAt }, token })
 
 }
 
