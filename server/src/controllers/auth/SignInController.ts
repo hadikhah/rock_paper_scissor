@@ -18,7 +18,7 @@ export const signIn = catchAsyncError(async (req: AuthRequest, res: Response) =>
     if (!user)
         throw throwIncorrectLoginCredentialsError()
 
-    const isCorrectPassword = compare(req.body.password, user.password)
+    const isCorrectPassword = await compare(req.body.password, user.password)
 
     if (!isCorrectPassword)
         throw throwIncorrectLoginCredentialsError()
