@@ -29,6 +29,11 @@ export const signIn = catchAsyncError(async (req: AuthRequest, res: Response) =>
 })
 
 
+/**
+ * returns incorrect user credentials error
+ *
+ * @return {*} 
+ */
 const throwIncorrectLoginCredentialsError = () => {
 
     return new ErrorHandler("Incorrect Email or password", 401)

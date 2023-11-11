@@ -17,7 +17,7 @@ export interface AuthRequest extends Request {
 }
 
 /**
- * jwt paylaod interface
+ * jwt [payload] interface
  *
  * @interface JwtPayload
  */
