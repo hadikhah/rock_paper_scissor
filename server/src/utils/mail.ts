@@ -1,7 +1,7 @@
 import { TransportOptions, createTransport } from "nodemailer"
 import ejs from "ejs"
 import path from "path";
-import { catchAsyncError } from "../middlewares/Exception";
+import process from "process"
 
 interface TransportMailOptionsCredentials {
     user?: String
@@ -15,27 +15,30 @@ interface TransportMailOptions extends TransportOptions {
     auth?: TransportMailOptionsCredentials
 }
 
-/**
- * email schema options
- * 
- *  @type {*} 
-*/
-const mailOptions: TransportMailOptions = {
-    host: process.env.MAIL_HOST,
-    port: process.env.MAIL_PORT,
-    secure: process.env.MAIL_SECURE == "true" ? true : (process.env.MAIL_SECURE == "false") ? false : null,
-    auth: {
-        user: process.env.MAIL_USERNAME,
-        pass: process.env.MAIL_PASSWORD,
-    },
-}
-
 /** 
  *  email schema
  * @type {*}
  */
-const transporter = createTransport(mailOptions);
+const transporter = () => {
 
+    /**
+     * email schema options
+     * 
+     *  @type {*} 
+    */
+    const mailOptions: TransportMailOptions = {
+        host: process.env.MAIL_HOST,
+        port: process.env.MAIL_PORT,
+        secure: process.env.MAIL_SECURE == "true" ? true : (process.env.MAIL_SECURE == "false") ? false : null,
+        auth: {
+            user: process.env.MAIL_USERNAME,
+            pass: process.env.MAIL_PASSWORD,
+        },
+    }
+
+    return createTransport(mailOptions);
+
+}
 /**
  * send email using html body format
  *
@@ -46,7 +49,7 @@ const transporter = createTransport(mailOptions);
  */
 export const sendMailHTML = async (receivers: string, subject: string, htmlBody: string) => {
 
-    const info = await transporter.sendMail({
+    const info: any = await transporter().sendMail({
         from: process.env.MAIL_FROM, // sender address
         to: receivers, // list of receivers
         subject: subject, // Subject line
@@ -54,7 +57,6 @@ export const sendMailHTML = async (receivers: string, subject: string, htmlBody:
     });
 
     return info
-
 }
 
 /**
@@ -67,7 +69,7 @@ export const sendMailHTML = async (receivers: string, subject: string, htmlBody:
  */
 export const sendMailTEXT = async (receivers: string, subject: string, textBody: string) => {
 
-    const info = await transporter.sendMail({
+    const info: any = await transporter().sendMail({
         from: process.env.MAIL_FROM, // sender address
         to: receivers, // list of receivers
         subject: subject, // Subject line
@@ -87,7 +89,7 @@ export const sendMailTEXT = async (receivers: string, subject: string, textBody:
  */
 export const renderTemplateEjs = async (template: string, data = {}) => {
 
-    const templatePath = path.join(__dirname, `../templates/${template}`)
+    const templatePath = path.join(__dirname, `../templates/${template}.ejs`)
 
     const html = await ejs.renderFile(templatePath, data)
 
