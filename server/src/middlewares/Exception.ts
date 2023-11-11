@@ -34,12 +34,19 @@ export const catchAsyncError = (theFunc: Function) => (req: Request, res: Respon
 export const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
 
     res.status(err.statusCode || 500)
-        .json(err.validationErrorMessages ?? {
-            success: false,
-            name: err.name,
-            message: err.message || `Internal server Error`,
-            stack: process.env.NODE_ENV == "development" ? err.stack?.split("\n   ") || null : null
-        })
+        .json(err.validationErrorMessages ?
+            {
+                success: false,
+                error: err.message || `Internal server Error`,
+                messages: err.validationErrorMessages
+            } :
+            {
+                success: false,
+                name: err.name,
+                message: err.message || `Internal server Error`,
+                stack: process.env.NODE_ENV == "development" ? err.stack?.split("\n   ") || null : null
+            }
+        )
 }
 
 /**
